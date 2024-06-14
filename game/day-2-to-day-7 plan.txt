@@ -1,0 +1,93 @@
+Day 2: Setting Up Basic Game Logic and Frontend Integration
+Tasks for Day 2:
+
+    Frontend Game Interface Design:
+        Design the main game screen in React.
+        Create basic UI components (buttons for "Udd" and "Not Udd", score display, timer).
+
+    Implement Entity Generation Logic:
+        Write JavaScript function to generate random entities (bird, ant, etc.) in React.
+        Display these entities on the screen at regular intervals.
+
+    Setup WebSocket Connection:
+        Integrate WebSocket connection from React frontend to Django backend.
+        Test sending and receiving messages between frontend and backend.
+
+    Handle User Input:
+        Capture user input (button clicks) in React.
+        Send user responses to Django backend via WebSocket.
+
+Day 3: Implementing Backend Game Logic and Score Tracking
+Tasks for Day 3:
+
+    Backend Game Logic:
+        Implement logic in Django consumer to handle user responses.
+        Validate if the response is correct based on the entity (bird/ant).
+
+    Score Management:
+        Update user scores based on their responses.
+        Send updated scores back to the frontend via WebSocket.
+
+    Database Setup for Scores:
+        Create a database model to store user scores.
+        Update Django views and models to handle score data.
+
+Day 4: Advanced Game Features and Improvements
+Tasks for Day 4:
+
+    Timer and Speed Increase:
+        Implement game timer in frontend.
+        Increase the speed of entity display every 15 seconds.
+
+    Game Over Logic:
+        Define conditions for game over (time out or maximum score).
+        Implement game over screen in React.
+
+    Enhance UI/UX:
+        Add animations and sounds for better user experience.
+        Improve overall UI design for the game.
+
+Day 5: Multiplayer Mode Implementation
+Tasks for Day 5:
+
+    Multiplayer Lobby Setup:
+        Create a lobby system in React for players to join multiplayer games.
+        Handle multiple WebSocket connections in Django.
+
+    Real-Time Communication:
+        Synchronize game state between multiple players using WebSockets.
+        Implement logic to handle multiple players’ inputs.
+
+    Scoreboard for Multiplayer:
+        Display real-time scoreboard showing scores of all players.
+        Handle scoring updates and display them in real-time.
+
+Day 6: Testing and Debugging
+Tasks for Day 6:
+
+    Unit Testing:
+        Write unit tests for Django backend logic.
+        Test WebSocket connections and game logic.
+
+    Integration Testing:
+        Test the integration between React frontend and Django backend.
+        Ensure real-time updates and score tracking are working correctly.
+
+    Bug Fixes:
+        Identify and fix bugs in the application.
+        Optimize performance and improve code quality.
+
+Day 7: Deployment and Final Touches
+Tasks for Day 7:
+
+    Prepare for Deployment:
+        Set up a production environment for Django and React.
+        Configure a web server (e.g., Nginx) to serve the application.
+
+    Deploy Application:
+        Deploy the Django backend on a cloud service (e.g., Heroku, AWS).
+        Deploy the React frontend on a static hosting service (e.g., Netlify, Vercel).
+
+    Final Touches:
+        Perform final testing in the production environment.
+        Add any final touches or improvements based on feedback.

@@ -1,0 +1,223 @@
+### Day 1: Project Setup and Environment Configuration
+
+#### Prerequisites
+
+1. **Install Python**: Ensure Python is installed on your machine. You can download it from [python.org](https://www.python.org/).
+2. **Install Node.js and npm**: Ensure Node.js and npm (Node Package Manager) are installed on your machine. You can download them from [nodejs.org](https://nodejs.org/).
+3. **Install Git**: Ensure Git is installed on your machine. You can download it from [git-scm.com](https://git-scm.com/).
+
+#### Step-by-Step Guide
+
+### Step 1: Set Up Virtual Environment and Initialize Django Project
+
+1. **Create Project Directory**:
+    ```bash
+    mkdir chidiya_udd
+    cd chidiya_udd
+    ```
+
+2. **Initialize Git Repository**:
+    ```bash
+    git init
+    ```
+
+3. **Set Up Virtual Environment**:
+    - If you don't have `pipenv` installed, you can install it using:
+      ```bash
+      pip install pipenv
+      ```
+    - Create a virtual environment and install Django, Channels, Daphne, and Psycopg2:
+      ```bash
+      pipenv install django channels daphne psycopg2
+      ```
+
+4. **Activate Virtual Environment**:
+    ```bash
+    pipenv shell
+    ```
+
+5. **Create Django Project and App**:
+    - Create a Django project named `chidiya_udd`:
+      ```bash
+      django-admin startproject chidiya_udd .
+      ```
+    - Create a Django app named `game`:
+      ```bash
+      django-admin startapp game
+      ```
+
+6. **Update `settings.py`**:
+    - Open `chidiya_udd/settings.py` and add the `channels` and `game` apps to the `INSTALLED_APPS` list:
+      ```python
+      INSTALLED_APPS = [
+          ...
+          'channels',
+          'game',
+      ]
+      ```
+
+    - Configure Channels:
+      ```python
+      ASGI_APPLICATION = 'chidiya_udd.asgi.application'
+      CHANNEL_LAYERS = {
+          'default': {
+              'BACKEND': 'channels_redis.core.RedisChannelLayer',
+              'CONFIG': {
+                  "hosts": [('127.0.0.1', 6379)],
+              },
+          },
+      }
+      ```
+
+    - Configure Database (for PostgreSQL):
+      ```python
+      DATABASES = {
+          'default': {
+              'ENGINE': 'django.db.backends.postgresql',
+              'NAME': 'chidiya_udd_db',
+              'USER': 'your_username',
+              'PASSWORD': 'your_password',
+              'HOST': 'localhost',
+              'PORT': '',
+          }
+      }
+      ```
+
+7. **Create ASGI Configuration**:
+    - Create `chidiya_udd/asgi.py` if it does not already exist:
+      ```python
+      import os
+      from channels.auth import AuthMiddlewareStack
+      from channels.routing import ProtocolTypeRouter, URLRouter
+      from django.core.asgi import get_asgi_application
+      import game.routing
+
+      os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chidiya_udd.settings')
+
+      application = ProtocolTypeRouter({
+          'http': get_asgi_application(),
+          'websocket': AuthMiddlewareStack(
+              URLRouter(
+                  game.routing.websocket_urlpatterns
+              )
+          ),
+      })
+      ```
+
+8. **Configure Routing for WebSockets**:
+    - Create `game/routing.py`:
+      ```python
+      from django.urls import path
+      from . import consumers
+
+      websocket_urlpatterns = [
+          path('ws/game/', consumers.GameConsumer.as_asgi()),
+      ]
+      ```
+
+    - Create `game/consumers.py`:
+      ```python
+      import json
+      from channels.generic.websocket import WebsocketConsumer
+
+      class GameConsumer(WebsocketConsumer):
+          def connect(self):
+              self.accept()
+
+          def disconnect(self, close_code):
+              pass
+
+          def receive(self, text_data):
+              text_data_json = json.loads(text_data)
+              response = text_data_json['response']
+              # Implement game logic here
+              self.send(text_data=json.dumps({
+                  'entity': 'Chidiya',
+                  'score': 10
+              }))
+      ```
+
+9. **Make and Apply Migrations**:
+    ```bash
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+
+10. **Run the Development Server**:
+    ```bash
+    python manage.py runserver
+    ```
+
+### Step 2: Set Up React Project
+
+1. **Navigate to the Project Directory**:
+    ```bash
+    cd ..
+    mkdir frontend
+    cd frontend
+    ```
+
+2. **Create React App**:
+    ```bash
+    npx create-react-app .
+    ```
+
+3. **Install Socket.io Client**:
+    ```bash
+    npm install socket.io-client
+    ```
+
+4. **Basic React App Structure**:
+    - Open `src/App.js` and replace its contents with the following:
+      ```javascript
+      import React, { useEffect, useState } from 'react';
+      import socketIOClient from "socket.io-client";
+
+      const ENDPOINT = "http://127.0.0.1:8000/ws/game/";
+
+      function App() {
+        const [entity, setEntity] = useState("");
+        const [score, setScore] = useState(0);
+
+        useEffect(() => {
+          const socket = socketIOClient(ENDPOINT);
+          socket.on("message", data => {
+            setEntity(data.entity);
+            setScore(prevScore => prevScore + data.score);
+          });
+
+          return () => socket.disconnect();
+        }, []);
+
+        const handleResponse = (response) => {
+          const socket = socketIOClient(ENDPOINT);
+          socket.emit('playerAction', { response: response });
+        }
+
+        return (
+          <div>
+            <h1>Chidiya Udd</h1>
+            <div>Entity: {entity}</div>
+            <div>Score: {score}</div>
+            <button onClick={() => handleResponse('udd')}>Udd</button>
+            <button onClick={() => handleResponse('not_udd')}>Not Udd</button>
+          </div>
+        );
+      }
+
+      export default App;
+      ```
+
+5. **Start the React Development Server**:
+    ```bash
+    npm start
+    ```
+
+### Summary
+
+By the end of Day 1, you will have:
+- Set up a Django project with Channels for WebSocket support.
+- Created a basic React front-end application.
+- Established WebSocket communication between the Django back-end and React front-end.
+
+This setup provides a solid foundation to build upon in the following days. Ensure both the Django server and React development server are running and can communicate with each other through WebSockets.

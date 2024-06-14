@@ -1,0 +1,281 @@
+Sure, let's break down Day 2 into smaller, more manageable steps. Here's a detailed plan:
+
+### Step-by-Step Plan for Day 2
+
+#### Step 1: Set Up the React Project
+1. **Create a new React project**:
+   ```bash
+   npx create-react-app chidiya-udd-frontend
+   cd chidiya-udd-frontend
+   ```
+
+2. **Start the React development server**:
+   ```bash
+   npm start
+   ```
+
+   This will start the development server and open the default React app in your browser at `http://localhost:3000`.
+
+#### Step 2: Clean Up the Default React App
+1. **Remove unnecessary files**:
+   - Delete the `src/logo.svg` file.
+   - Delete all the code inside `src/App.css` and `src/App.test.js`.
+
+2. **Update `src/App.js`**:
+   Replace the content with a simple structure to get started:
+   ```jsx
+   import React from 'react';
+   import './App.css';
+
+   function App() {
+     return (
+       <div className="App">
+         <header className="App-header">
+           <h1>Chidiya Udd Game</h1>
+         </header>
+       </div>
+     );
+   }
+
+   export default App;
+   ```
+
+3. **Update `src/App.css`**:
+   Add some basic styling:
+   ```css
+   .App {
+     text-align: center;
+   }
+
+   .App-header {
+     background-color: #282c34;
+     min-height: 100vh;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     font-size: calc(10px + 2vmin);
+     color: white;
+   }
+   ```
+
+#### Step 3: Create Basic Game Components
+1. **Create a `components` directory**:
+   ```bash
+   mkdir src/components
+   ```
+
+2. **Create basic components**:
+   - `GameScreen.js`:
+     ```jsx
+     import React from 'react';
+     import EntityDisplay from './EntityDisplay';
+     import ScoreDisplay from './ScoreDisplay';
+     import Timer from './Timer';
+     import UddButton from './UddButton';
+     import NotUddButton from './NotUddButton';
+
+     const GameScreen = () => {
+       return (
+         <div>
+           <Timer />
+           <ScoreDisplay />
+           <EntityDisplay />
+           <UddButton />
+           <NotUddButton />
+         </div>
+       );
+     };
+
+     export default GameScreen;
+     ```
+
+   - `EntityDisplay.js`:
+     ```jsx
+     import React, { useState, useEffect } from 'react';
+
+     const entities = [
+       { text: 'Chidiya', canFly: true },
+       { text: 'Cheenti', canFly: false },
+       // Add more entities
+     ];
+
+     const EntityDisplay = () => {
+       const [currentEntity, setCurrentEntity] = useState({});
+
+       useEffect(() => {
+         const entityInterval = setInterval(() => {
+           const randomIndex = Math.floor(Math.random() * entities.length);
+           setCurrentEntity(entities[randomIndex]);
+         }, 2000); // Change interval time as needed
+
+         return () => clearInterval(entityInterval);
+       }, []);
+
+       return (
+         <div>
+           <h1>{currentEntity.text}</h1>
+         </div>
+       );
+     };
+
+     export default EntityDisplay;
+     ```
+
+   - `ScoreDisplay.js`:
+     ```jsx
+     import React, { useState } from 'react';
+
+     const ScoreDisplay = () => {
+       const [score, setScore] = useState(0);
+
+       return (
+         <div>
+           <h2>Score: {score}</h2>
+         </div>
+       );
+     };
+
+     export default ScoreDisplay;
+     ```
+
+   - `Timer.js`:
+     ```jsx
+     import React, { useState, useEffect } from 'react';
+
+     const Timer = () => {
+       const [timeLeft, setTimeLeft] = useState(60);
+
+       useEffect(() => {
+         const timerInterval = setInterval(() => {
+           setTimeLeft(prevTime => prevTime - 1);
+         }, 1000);
+
+         return () => clearInterval(timerInterval);
+       }, []);
+
+       return (
+         <div>
+           <h2>Time Left: {timeLeft}</h2>
+         </div>
+       );
+     };
+
+     export default Timer;
+     ```
+
+   - `UddButton.js`:
+     ```jsx
+     import React from 'react';
+
+     const UddButton = () => {
+       const handleUdd = () => {
+         console.log('Udd clicked');
+       };
+
+       return <button onClick={handleUdd}>Udd</button>;
+     };
+
+     export default UddButton;
+     ```
+
+   - `NotUddButton.js`:
+     ```jsx
+     import React from 'react';
+
+     const NotUddButton = () => {
+       const handleNotUdd = () => {
+         console.log('Not Udd clicked');
+       };
+
+       return <button onClick={handleNotUdd}>Not Udd</button>;
+     };
+
+     export default NotUddButton;
+     ```
+
+#### Step 4: Integrate Components into Main App
+1. **Update `src/App.js`**:
+   ```jsx
+   import React from 'react';
+   import './App.css';
+   import GameScreen from './components/GameScreen';
+
+   function App() {
+     return (
+       <div className="App">
+         <header className="App-header">
+           <h1>Chidiya Udd Game</h1>
+           <GameScreen />
+         </header>
+       </div>
+     );
+   }
+
+   export default App;
+   ```
+
+#### Step 5: Set Up WebSocket Connection
+1. **Install Socket.IO client**:
+   ```bash
+   npm install socket.io-client
+   ```
+
+2. **Configure WebSocket connection in React**:
+   - **Create a new file `src/socket.js`**:
+     ```jsx
+     import io from 'socket.io-client';
+
+     const socket = io('http://localhost:8000'); // Update with your backend URL
+
+     socket.on('connect', () => {
+       console.log('Connected to WebSocket server');
+     });
+
+     socket.on('disconnect', () => {
+       console.log('Disconnected from WebSocket server');
+     });
+
+     export default socket;
+     ```
+
+   - **Update `UddButton.js`**:
+     ```jsx
+     import React from 'react';
+     import socket from '../socket';
+
+     const UddButton = () => {
+       const handleUdd = () => {
+         socket.emit('user_response', { response: 'udd' });
+       };
+
+       return <button onClick={handleUdd}>Udd</button>;
+     };
+
+     export default UddButton;
+     ```
+
+   - **Update `NotUddButton.js`**:
+     ```jsx
+     import React from 'react';
+     import socket from '../socket';
+
+     const NotUddButton = () => {
+       const handleNotUdd = () => {
+         socket.emit('user_response', { response: 'not_udd' });
+       };
+
+       return <button onClick={handleNotUdd}>Not Udd</button>;
+     };
+
+     export default NotUddButton;
+     ```
+
+### Summary
+By the end of Day 2, you will have:
+- A basic React setup with a functional game interface.
+- Random entity generation logic.
+- User input handling with buttons.
+- WebSocket integration for real-time communication with the Django backend.
+
+Follow these steps carefully, and you will have a solid foundation for the rest of the development process. If you encounter any issues, feel free to ask for further assistance.

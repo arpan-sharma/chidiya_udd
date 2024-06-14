@@ -1,0 +1,170 @@
+## Low-Level Design (LLD)
+
+### Detailed Design of UI Components
+
+#### Main Menu
+- **HTML Structure**:
+  ```html
+  <div id="main-menu">
+    <button id="start-game">Start Game</button>
+    <button id="view-scores">View Scores</button>
+    <button id="settings">Settings</button>
+  </div>
+  ```
+- **JavaScript**:
+  ```javascript
+  document.getElementById('start-game').addEventListener('click', startGame);
+  ```
+
+#### Game Screen
+- **HTML Structure**:
+  ```html
+  <div id="game-screen">
+    <div id="entity"></div>
+    <div id="timer"></div>
+    <div id="score"></div>
+  </div>
+  ```
+- **JavaScript**:
+  ```javascript
+  function generateEntity() {
+    // Logic to generate random entities
+  }
+
+  function startTimer() {
+    // Logic to start the game timer
+  }
+  ```
+
+### Detailed Game Logic
+
+#### Entity Generation
+- **Algorithm**:
+  - Define a list of possible entities (bird, ant, etc.).
+  - Randomly select an entity from the list.
+- **Code Example**:
+  ```javascript
+  const entities = [
+    { text: 'Chidiya', canFly: true },
+    { text: 'Cheenti', canFly: false },
+    // More entities
+  ];
+
+  function generateEntity() {
+    const randomIndex = Math.floor(Math.random() * entities.length);
+    const entity = entities[randomIndex];
+    document.getElementById('entity').innerText = entity.text;
+    return entity;
+  }
+  ```
+
+#### Response Detection
+- **Algorithm**:
+  - Capture user input (e.g., up arrow for "udd", down arrow for "not udd").
+  - Compare user response to the current entity’s ability.
+- **Code Example**:
+  ```javascript
+  function handleResponse(userResponse) {
+    const currentEntity = generateEntity(); // Assume this returns the current entity
+    if ((userResponse === 'up' && currentEntity.canFly) ||
+        (userResponse === 'down' && !currentEntity.canFly)) {
+      updateScore(true);
+    } else {
+      updateScore(false);
+    }
+  }
+  ```
+
+#### Scoring System
+- **Algorithm**:
+  - Increment score for correct responses.
+  - Deduct points for incorrect responses.
+  - Display updated score.
+- **Code Example**:
+  ```javascript
+  let score = 0;
+
+  function updateScore(isCorrect) {
+    if (isCorrect) {
+      score += 10;
+    } else {
+      score -= 5;
+    }
+    document.getElementById('score').innerText = score;
+  }
+  ```
+
+#### Timer
+- **Algorithm**:
+  - Initialize a countdown timer.
+  - Update the timer display every second.
+  - Increase difficulty by decreasing entity display time every 15 seconds.
+- **Code Example**:
+  ```javascript
+  let timer = 60;
+  let intervalTime = 2; // Starting interval time in seconds
+
+  function startTimer() {
+    const interval = setInterval(() => {
+      if (timer > 0) {
+        timer--;
+        document.getElementById('timer').innerText = timer;
+        if (timer % 15 === 0 && intervalTime > 0.5) {
+          intervalTime -= 0.5; // Increase difficulty
+        }
+      } else {
+        clearInterval(interval);
+        endGame();
+      }
+    }, 1000);
+  }
+  ```
+
+### Multiplayer Mode
+For the multiplayer version, additional components and logic will be implemented:
+
+1. **Real-Time Communication**:
+   - **Socket.io**: To handle real-time communication between players.
+   - **Server-Side Logic**: To manage game state and synchronize between multiple players.
+
+2. **Multiplayer Game Flow**:
+   - **Player Lobby**: Interface for players to join and start multiplayer games.
+   - **Real-Time Updates**: Synchronize entity display and player responses across all clients.
+
+### Class Diagram
+```javascript
+class Game {
+  constructor() {
+    this.score = 0;
+    this.timer = null;
+  }
+
+  start() {
+    this.reset();
+    this.startTimer();
+    this.generateEntity();
+  }
+
+  generateEntity() {
+    // Logic to generate entity
+  }
+
+  startTimer() {
+    // Logic to start timer
+  }
+
+  handleResponse(response) {
+    // Logic to handle user response
+  }
+
+  reset() {
+    this.score = 0;
+    // Reset other game states
+  }
+}
+```
+
+---
+
+### Summary
+To summarize, we first gathered the requirements to understand the game's mechanics and user interactions. The High-Level Design outlines the architecture and major components, ensuring we have a clear roadmap. The Low-Level Design dives into specifics, providing detailed algorithms, data structures, and implementation details to guide the development process. This structured approach ensures we can develop the "Chidiya Udd" game efficiently and effectively, with the potential for future expansion into multiplayer mode.

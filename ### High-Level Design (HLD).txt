@@ -1,0 +1,190 @@
+### High-Level Design (HLD) and Low-Level Design (LLD) for "Chidiya Udd" Game
+
+Below is a comprehensive HLD and LLD for the "Chidiya Udd" game, suitable for both single-player and multiplayer scenarios, crafted for interview purposes. This document outlines the overall architecture, major components, interactions, and detailed implementation.
+
+---
+
+## High-Level Design (HLD)
+
+### Overview
+The "Chidiya Udd" game is a web-based application designed to be both engaging and challenging. The primary objective is to create an interactive experience where players react to commands and entities appearing on the screen, indicating whether they can "fly" (udd) or not. The game starts with single-player mode and is scalable to include multiplayer functionality.
+
+### Requirements
+- **Single-Player Mode**: Players react to entities displayed on the screen.
+- **Multiplayer Mode**: Multiple players compete in real-time.
+- **Input Mechanism**: Players use the mouse or keyboard (up and down arrows) to respond.
+- **Increasing Difficulty**: The speed of entity display increases every 15 seconds.
+- **Audio/Visual Feedback**: Sound and text accompany the commands.
+
+### Architecture
+The game follows a client-server architecture:
+
+#### Client-Side
+- **HTML/CSS**: Structure and styling of the game interface.
+- **JavaScript**: Implements game logic and interactivity.
+- **Framework**: Optional use of React.js for enhanced state management and component-based architecture.
+
+#### Server-Side
+- **Node.js with Express.js**: Manages real-time communication and multiplayer logic.
+- **Database**: MongoDB to store player scores and game data.
+
+### Major Components
+1. **UI Components**:
+   - **Main Menu**: Start the game, view scores, access settings.
+   - **Game Screen**: Displays entities, score, and timer.
+   - **Scoreboard**: Shows high scores.
+   - **Settings**: Configure game preferences.
+
+2. **Game Logic**:
+   - **Entity Generation**: Randomly generates entities (e.g., bird, ant).
+   - **Response Detection**: Detects and validates player responses.
+   - **Scoring System**: Tracks and displays the player’s score.
+   - **Timer**: Manages game duration and difficulty scaling.
+
+3. **Audio/Visual Effects**:
+   - **Sound Effects**: Feedback for correct and incorrect responses.
+   - **Animations**: Enhances user experience with visual effects.
+
+### Diagrams
+- **Component Diagram**: Illustrates main components and their interactions.
+- **Flowchart**: Describes game flow from start to end.
+
+---
+Sure! Here are the flowchart and component diagram for the "Chidiya Udd" game:
+
+### Component Diagram
+
+This diagram illustrates the main components of the game and their interactions:
+
+```
+ +-------------------+
+ |   User Interface   |
+ +---------+---------+
+           |
+           |
+           v
+ +---------+---------+
+ |    Game Engine    |
+ +---------+---------+
+           |
+           |
+           v
+ +---------+---------+
+ |  Command Generator|
+ +---------+---------+
+           |
+           |
+           v
+ +---------+---------+
+ |  Response Handler |
+ +---------+---------+
+           |
+           |
+           v
+ +---------+---------+
+ |  Score Manager    |
+ +---------+---------+
+           |
+           |
+           v
+ +---------+---------+
+ |    Timer          |
+ +---------+---------+
+```
+
+### Flowchart
+
+This flowchart describes the game flow from start to end:
+
+```
+    +-------------------+
+    |    Start Game     |
+    +--------+----------+
+             |
+             v
+    +--------+----------+
+    |   Display Menu    |
+    +--------+----------+
+             |
+             v
+    +--------+----------+
+    |  User Selects Mode|
+    +--------+----------+
+             |
+             v
+    +--------+----------+
+    |  Initialize Game  |
+    +--------+----------+
+             |
+             v
+    +--------+----------+
+    | Generate Command  |
+    +--------+----------+
+             |
+             v
+    +--------+----------+
+    |  Display Entity   |
+    +--------+----------+
+             |
+             v
+    +--------+----------+
+    | Capture User Input|
+    +--------+----------+
+             |
+             v
+    +--------+----------+
+    | Validate Response |
+    +--------+----------+
+             |
+             v
+    +--------+----------+
+    |   Update Score    |
+    +--------+----------+
+             |
+             v
+    +--------+----------+
+    |      Timer        |
+    +--------+----------+
+             |
+             v
+    +--------+----------+
+    |     Check Time    |
+    +--------+----------+
+             |
+    +--------+----------+
+    |  Game Over?       |
+    +--------+----------+
+             |
+             v
+  +----------+----------+
+  |    End Game/Reset   |
+  +---------------------+
+```
+
+### Explanation of Components and Flowchart
+
+#### Component Diagram
+
+1. **User Interface**: This component encompasses the main menu, game screen, scoreboard, and settings.
+2. **Game Engine**: The core logic of the game, which manages the game flow and interactions.
+3. **Command Generator**: Generates random commands or entities to be displayed on the screen.
+4. **Response Handler**: Captures and validates user input against the current command.
+5. **Score Manager**: Manages and updates the player's score based on correct or incorrect responses.
+6. **Timer**: Manages the game timer and difficulty adjustments.
+
+#### Flowchart
+
+1. **Start Game**: The entry point where the game is initiated.
+2. **Display Menu**: Shows the main menu where the user can start the game, view scores, or access settings.
+3. **User Selects Mode**: The user selects either single-player or multiplayer mode.
+4. **Initialize Game**: Resets all game parameters and prepares the game screen.
+5. **Generate Command**: Randomly generates a command/entity to be displayed.
+6. **Display Entity**: The entity is displayed on the screen for the user to react to.
+7. **Capture User Input**: The game captures the user’s input (mouse click or arrow key press).
+8. **Validate Response**: The user's input is validated against the current entity's ability to "udd".
+9. **Update Score**: The score is updated based on the correctness of the user's response.
+10. **Timer**: Manages the countdown and increases the difficulty by speeding up the entity display.
+11. **Check Time**: Checks if the game time has elapsed.
+12. **Game Over?**: Determines if the game is over (time has run out). If not, it loops back to generate the next command. If the game is over, it ends and may reset the game parameters.
+
+These diagrams provide a clear visualization of the game's structure and flow, aiding in understanding and communication during an interview or development process.
