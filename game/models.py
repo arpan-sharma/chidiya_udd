@@ -8,3 +8,8 @@ class Score(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.score}'
+class Entity(models.Model):
+    name = models.CharField(max_length=100)
+    can_fly = models.BooleanField(default=False)
+    symbol = models.CharField(max_length=100)  # URL or path to symbol image
+    sound = models.CharField(max_length=100)  # URL or path to sound file

@@ -1,13 +1,15 @@
 // src/App.js
 import React from 'react';
 import GameScreen from './components/GameScreen';
+import './App.css';  // Ensure you create and style this CSS file
+import './components/GameScreen.js'
 
-const App = () => {
-    return (
-        <div>
-            <GameScreen />
-        </div>
-    );
-};
+function App() {
+  return (
+    <div className="App">
+      <GameScreen />
+    </div>
+  );
+}
 
 export default App;
