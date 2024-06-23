@@ -3,9 +3,12 @@
     text-align: center;
     background-image: url('../components/Gemini_Generated_Image_m6l5u5m6l5u5m6l5.jpg');
     background-size: cover;
-    padding: 20px;
+    height: 100vh;
+    display: flex;
     color: white;
-    font-family: 'Arial', sans-serif;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .entity-display {
@@ -56,4 +59,20 @@ button:hover {
 
 button:focus {
     outline: none;
+}
+
+
+.entity-display img {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
 }

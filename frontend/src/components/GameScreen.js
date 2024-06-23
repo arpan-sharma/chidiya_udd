@@ -16,11 +16,11 @@ const GameScreen = () => {
                 .catch(error => console.error('Error fetching game state:', error));
         };
 
-        fetchGameState();
-        const interval = setInterval(fetchGameState, 1000);
+         fetchGameState();
+        // const interval = setInterval(fetchGameState, 1000);
 
-        return () => clearInterval(interval);
-    }, []);
+        // return () => clearInterval(interval);
+    }, [score]);
 
     const handleUserResponse = (response) => {
         axios.post('http://127.0.0.1:8000/api/update-game/', { response })
@@ -38,7 +38,8 @@ const GameScreen = () => {
                 <div className="entity-display">
                     <img src={entity.symbol} alt={entity.name} />
                     <h2>{entity.name}</h2>
-                    <audio src={entity.sound} autoPlay />
+                    <audio src={`/${entity.sound}`} autoPlay />
+
                 </div>
             )}
             <h2>स्कोर: {score}</h2>
